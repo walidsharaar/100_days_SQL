@@ -17,3 +17,17 @@ SELECT *
 FROM cte
 WHERE rk = 1;
 
+--Below version that consider date 
+WITH cte AS (
+    SELECT
+        *,
+        ROW_NUMBER() OVER (
+            PARTITION BY id
+            ORDER BY effective_date DESC
+        ) AS rk
+    FROM ms_employee_salary
+)
+SELECT *
+FROM cte
+WHERE rk = 1
+ORDER BY id;
