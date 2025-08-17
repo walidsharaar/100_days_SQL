@@ -9,3 +9,12 @@ group by department)
 select e.department,e.first_name,e.salary, avg_salary from cte c
 join employee e on c.department = e.department
 order by department asc
+
+--alternative
+SELECT 
+    department,
+    first_name,
+    salary,
+    AVG(salary) OVER (PARTITION BY department) AS avg_salary
+FROM employee
+ORDER BY department ASC;
