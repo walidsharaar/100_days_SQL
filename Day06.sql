@@ -9,3 +9,19 @@ from customers c
 left join orders o
 on c.id= o.cust_id
 order by first_name,order_details asc
+
+
+--Alternative
+WITH customer_orders AS (
+    SELECT 
+        c.first_name,
+        c.last_name,
+        c.city,
+        o.order_details
+    FROM customers c
+    LEFT JOIN orders o
+        ON c.id = o.cust_id
+)
+SELECT *
+FROM customer_orders
+ORDER BY first_name ASC, order_details ASC;
