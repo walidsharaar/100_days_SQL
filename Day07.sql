@@ -8,3 +8,12 @@ SELECT
   ROUND(AVG(bedrooms), 2) AS avg_bedrooms
 FROM airbnb_search_details
 GROUP BY city, property_type;
+
+
+--Alternative
+SELECT DISTINCT
+  city,
+  property_type,
+  AVG(bathrooms) OVER (PARTITION BY city, property_type) AS n_bathrooms_avg,
+  AVG(bedrooms) OVER (PARTITION BY city, property_type) AS n_bedrooms_avg
+FROM airbnb_search_details;
