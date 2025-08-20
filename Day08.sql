@@ -10,3 +10,22 @@ select department, count(worker_id)
 from worker
 where joining_date>'2014-04-01'
 group by department
+
+
+--=Alternative
+--1.
+SELECT DISTINCT department,
+       COUNT(*) OVER (PARTITION BY department) AS worker_count
+FROM worker
+WHERE joining_date > '2014-04-01';
+
+
+--2.
+WITH filtered AS (
+  SELECT department
+  FROM worker
+  WHERE joining_date > '2014-04-01'
+)
+SELECT department, COUNT(*) 
+FROM filtered
+GROUP BY department;
