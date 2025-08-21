@@ -5,7 +5,8 @@ Write a query that returns the number of unique users per client for each month.
 SELECT 
     client_id,
     EXTRACT(MONTH FROM time_id) AS month,
-    COUNT(user_id) AS users_num
+    COUNT(distinct user_id) AS users_num
 FROM fact_events
 GROUP BY client_id, month
 ORDER BY client_id, month;
+
