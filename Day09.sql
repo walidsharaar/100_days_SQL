@@ -9,4 +9,19 @@ SELECT
 FROM fact_events
 GROUP BY client_id, month
 ORDER BY client_id, month;
+--- Alternative 
 
+WITH monthly_events AS (
+    SELECT 
+        client_id,
+        DATE_TRUNC('month', time_id) AS month,
+        user_id
+    FROM fact_events
+)
+SELECT 
+    client_id,
+    month,
+    COUNT(DISTINCT user_id) AS users_num
+FROM monthly_events
+GROUP BY client_id, month
+ORDER BY client_id, month;
