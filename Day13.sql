@@ -3,3 +3,13 @@ Meta/Facebook has developed a new programming language called Hack. To measure t
 Based on the above, find the average popularity of the Hack per office location.
 Output the location along with the average popularity.
 */
+
+select * from facebook_employees;
+
+select * from  facebook_hack_survey;
+
+select fe.location, avg(fh.popularity) as popularity
+from facebook_employees fe
+left join facebook_hack_survey fh
+on fh.employee_id = fe.id
+group by fe.location
