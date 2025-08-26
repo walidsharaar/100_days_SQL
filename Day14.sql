@@ -11,3 +11,20 @@ from customers c
 left join orders o 
 on c.id = o.cust_id
 where first_name in ('Jill','Eva')
+
+
+--Alternative
+
+WITH target_customers AS (
+    SELECT id, first_name
+    FROM customers
+    WHERE first_name IN ('Jill','Eva')
+)
+SELECT 
+    tc.first_name, 
+    o.order_date, 
+    o.order_details, 
+    o.total_order_cost
+FROM target_customers tc
+LEFT JOIN orders o 
+    ON tc.id = o.cust_id;
