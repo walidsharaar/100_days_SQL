@@ -20,3 +20,14 @@ FROM sf_restaurant_health_violations
 WHERE business_name = 'Roxanne Cafe'
 GROUP BY inspection_year, inspection_month
 ORDER BY inspection_year, inspection_month;
+
+
+SELECT 
+    inspection_date,
+    business_name,
+    violation_id,
+    EXTRACT(YEAR FROM inspection_date)::INT AS inspection_year,
+    COUNT(violation_id) OVER (PARTITION BY EXTRACT(YEAR FROM inspection_date)) AS n_violations_per_year
+FROM sf_restaurant_health_violations
+WHERE business_name = 'Roxanne Cafe'
+ORDER BY inspection_year, inspection_date;
