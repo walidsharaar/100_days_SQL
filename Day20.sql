@@ -3,3 +3,7 @@ Find the number of employees working in the Admin department who joined in April
 
 
 */
+
+select count(*)
+from worker
+where department='Admin' and extract(month from joining_date) >= 4
