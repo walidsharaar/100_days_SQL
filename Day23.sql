@@ -39,3 +39,35 @@ SELECT
 FROM valid_sessions
 GROUP BY user_id
 ORDER BY user_id;
+
+
+--Alternative
+WITH flagged AS (
+    SELECT
+        user_id,
+        DATE(timestamp) AS session_date,
+        action,
+        timestamp,
+        MAX(CASE WHEN action = 'page_load' THEN timestamp END)
+            OVER (PARTITION BY user_id, DATE(timestamp)) AS latest_load,
+        MIN(CASE WHEN action = 'page_exit' THEN timestamp END)
+            OVER (PARTITION BY user_id, DATE(timestamp)) AS earliest_exit
+    FROM facebook_web_log
+    WHERE action IN ('page_load', 'page_exit')
+),
+valid_sessions AS (
+    SELECT DISTINCT
+        user_id,
+        session_date,
+        EXTRACT(EPOCH FROM (earliest_exit - latest_load)) AS session_seconds
+    FROM flagged
+    WHERE latest_load IS NOT NULL
+      AND earliest_exit IS NOT NULL
+      AND latest_load < earliest_exit
+)
+SELECT
+    user_id,
+    AVG(session_seconds) AS avg_session_duration
+FROM valid_sessions
+GROUP BY user_id
+ORDER BY user_id;
