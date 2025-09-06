@@ -28,3 +28,25 @@ cte2 AS (
 SELECT user_id
 FROM cte2
 ORDER BY user_id;
+
+--Alternative
+WITH numbered AS (
+    SELECT
+        user_id,
+        created_at,
+        LEAD(created_at) OVER (
+            PARTITION BY user_id
+            ORDER BY created_at
+        ) AS next_purchase,
+        ROW_NUMBER() OVER (
+            PARTITION BY user_id
+            ORDER BY created_at
+        ) AS rn_user
+    FROM amazon_transactions
+)
+SELECT user_id
+FROM numbered
+WHERE rn_user = 1
+  AND next_purchase IS NOT NULL
+  AND (next_purchase::date - created_at::date) BETWEEN 1 AND 7
+ORDER BY user_id;
