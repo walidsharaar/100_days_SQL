@@ -10,3 +10,13 @@ Your output should be a list of overbudget projects, where each entry includes t
 he total expenses should be rounded up to the nearest dollar. Assume all years have 365 days and disregard leap years.
 
 */
+
+
+select p.title,p.budget, sum((datediff(end_date,start_date) * salary)/365 ) as project_salary
+from linkedin_projects p
+inner join linkedin_emp_projects empp
+on p.id = empp.project_id
+inner join linkedin_employees emp
+on emp.id = empp.emp_id
+group by title, budget
+order by title
