@@ -7,3 +7,18 @@ and their activity rank.
 •	Then, sort users with the same number of emails in alphabetical order by their username.
 •	In your rankings, return a unique value (i.e., a unique rank) even if multiple users have the same number of emails.
 */
+
+SELECT
+    user_id,
+    total_emails,
+    ROW_NUMBER() OVER (
+        ORDER BY total_emails DESC, user_id ASC
+    ) AS activity_rank
+FROM (
+    SELECT 
+        from_user AS user_id,
+        COUNT(*) AS total_emails
+    FROM google_gmail_emails
+    GROUP BY from_user
+) AS t
+ORDER BY activity_rank;
