@@ -22,3 +22,15 @@ FROM (
     GROUP BY from_user
 ) AS t
 ORDER BY activity_rank;
+
+
+---Alternative
+
+
+
+SELECT 
+    from_user,
+    COUNT(*) AS email_sent,
+    ROW_NUMBER() OVER (ORDER BY COUNT(*) DESC, from_user ASC) AS rk
+FROM google_gmail_emails
+GROUP BY from_user;
