@@ -3,3 +3,15 @@ Find the processed rate of tickets for each type. The processed rate is defined 
 
 
 */
+
+
+SELECT 
+    type,
+    ROUND(
+        SUM(CASE WHEN processed = 'TRUE' THEN 1 ELSE 0 END) * 1.0 
+        / COUNT(*), 
+        2
+    ) AS processed_rate
+FROM facebook_complaints
+GROUP BY type;
+
