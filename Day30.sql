@@ -10,3 +10,15 @@ sum(total_order_cost)
 from orders
 where extract(Month from order_date) = 3
 group by cust_id
+
+
+
+--Alternative
+
+select 
+    cust_id,
+    SUM(total_order_cost) as total_revenue
+from orders
+where date_trunc('month', order_date) = date '2019-03-01'
+group by cust_id
+order by total_revenue desc;
