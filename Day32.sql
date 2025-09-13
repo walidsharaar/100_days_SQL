@@ -11,3 +11,13 @@ Output the number of survivors and non-survivors by each class.
 
 
 */
+
+
+
+Select survived , 
+sum(case when pclass = 1 then 1 else 0 end ) as first_class,
+sum(case when pclass = 2 then 1 else 0 end ) as secong_class,
+sum(case when pclass = 3 then 1 else 0 end ) as third_class
+
+from titanic
+group by survived
