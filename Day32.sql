@@ -14,10 +14,23 @@ Output the number of survivors and non-survivors by each class.
 
 
 
-Select survived , 
-sum(case when pclass = 1 then 1 else 0 end ) as first_class,
-sum(case when pclass = 2 then 1 else 0 end ) as secong_class,
-sum(case when pclass = 3 then 1 else 0 end ) as third_class
+SELECT survived , 
+sum(CASE WHEN pclass = 1 THEN 1 ELSE 0 END ) AS first_class,
+sum(CASE WHEN pclass = 2 THEN 1 ELSE 0 END ) AS secong_class,
+sum(CASE WHEN pclass = 3 THEN 1 ELSE 0 END ) AS third_class
 
-from titanic
-group by survived
+FROM titanic
+GROUP BY survived
+
+
+
+-- Alternative
+
+SELECT 
+    survived,
+    COUNT(*) FILTER (WHERE pclass = 1) AS first_class,
+    COUNT(*) FILTER (WHERE pclass = 2) AS second_class,
+    COUNT(*) FILTER (WHERE pclass = 3) AS third_class
+FROM titanic
+GROUP BY survived
+ORDER BY survived;
