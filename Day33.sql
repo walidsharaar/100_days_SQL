@@ -1,0 +1,3 @@
+/*
+Find the second highest salary of employees.
+*/
