@@ -11,3 +11,14 @@ FROM employee e
 INNER JOIN employee m 
     ON e.manager_id = m.id
 WHERE e.salary > m.salary;
+
+
+--Alternative
+
+SELECT first_name, salary
+FROM employee e
+WHERE salary > (
+    SELECT m.salary
+    FROM employee m
+    WHERE m.id = e.manager_id
+);
