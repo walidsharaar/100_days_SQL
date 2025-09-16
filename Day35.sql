@@ -16,3 +16,14 @@ MAX(salary)
 FROM employee
 GROUP BY department
 )
+
+
+--Alternatives
+--1.
+SELECT department, first_name, salary
+FROM employee e
+WHERE salary = (
+    SELECT MAX(salary)
+    FROM employee
+    WHERE department = e.department
+);
