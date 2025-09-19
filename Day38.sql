@@ -8,3 +8,26 @@ skipping rank 5).
 
 
 */
+
+
+SELECT 
+    name, 
+    SUM(review_count) AS total_reviews
+FROM yelp_business
+GROUP BY name
+ORDER BY total_reviews DESC
+LIMIT 5;
+
+
+--Alternative
+
+SELECT name, total_reviews
+FROM (
+    SELECT 
+        name, 
+        SUM(review_count) AS total_reviews,
+        RANK() OVER (ORDER BY SUM(review_count) DESC) AS rnk
+    FROM yelp_business
+    GROUP BY name
+) t
+WHERE rnk <= 5;
