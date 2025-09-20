@@ -14,3 +14,13 @@ SELECT
 FROM cte
 GROUP BY category
 ORDER BY total_reviews DESC;
+
+
+--Altenative
+
+SELECT 
+    unnest(string_to_array(categories, ';')) AS category,
+    SUM(review_count) AS total_reviews
+FROM yelp_business
+GROUP BY category
+ORDER BY total_reviews DESC
