@@ -4,3 +4,10 @@ If two or more guests have the same number of messages, they should have the sam
 showing the rank, guest identifier, and total number of messages for each guest, ordered from the most to least active.
 */
 
+SELECT 
+    DENSE_RANK() OVER (ORDER BY SUM(n_messages) DESC) AS dense_rank_order,
+    id_guest,
+    SUM(n_messages) AS total_msgs
+FROM airbnb_contacts
+GROUP BY id_guest
+ORDER BY total_msgs DESC;
