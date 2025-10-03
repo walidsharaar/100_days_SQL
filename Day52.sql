@@ -10,3 +10,17 @@ ON a.user_id = b.user_id
     AND a.created_at < b.created_at
     AND a.created_at <> b.created_at
 ORDER BY a.user_id
+
+
+---Alternative
+
+SELECT DISTINCT user_id
+FROM (
+    SELECT 
+        user_id,
+        created_at,
+        LEAD(created_at) OVER (PARTITION BY user_id ORDER BY created_at) AS next_tx
+    FROM amazon_transactions
+) t
+WHERE next_tx > created_at
+  AND next_tx <= created_at + INTERVAL '7 days';
