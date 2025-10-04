@@ -12,3 +12,17 @@ Output three columns:
 •   The number of premium accounts that were actively paying on that day.
 •   The number of those accounts that remain premium and are still paying after 7 days.
 */
+
+SELECT 
+    a.entry_date,
+    COUNT(a.final_price) AS count_a,
+    COUNT(b.final_price) AS count_b
+FROM premium_accounts_by_day a
+LEFT JOIN premium_accounts_by_day b
+    ON a.account_id = b.account_id
+   AND (b.entry_date - a.entry_date) = 7
+   AND b.final_price > 0
+WHERE a.final_price > 0
+GROUP BY a.entry_date
+ORDER BY a.entry_date
+LIMIT 7;
