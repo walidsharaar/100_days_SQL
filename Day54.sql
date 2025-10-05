@@ -30,3 +30,33 @@ ranked AS (
 SELECT candidate
 FROM ranked
 WHERE rnk = 1;
+
+---Alternative
+WITH voter_vote_count AS (
+    SELECT 
+        voter,
+        COUNT(candidate) AS total_votes
+    FROM voting_results
+    WHERE candidate IS NOT NULL
+    GROUP BY voter
+),
+votes_split AS (
+    SELECT 
+        v.candidate,
+        ROUND(1.0 / c.total_votes, 3) AS vote_share
+    FROM voting_results v
+    JOIN voter_vote_count c 
+        ON v.voter = c.voter
+    WHERE v.candidate IS NOT NULL
+),
+candidate_total AS (
+    SELECT 
+        candidate,
+        ROUND(SUM(vote_share), 3) AS total_votes
+    FROM votes_split
+    GROUP BY candidate
+)
+SELECT candidate
+FROM candidate_total
+WHERE total_votes = (SELECT MAX(total_votes) FROM candidate_total);
+
