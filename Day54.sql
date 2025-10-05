@@ -7,3 +7,26 @@ To avoid issues with a floating-point error you can round the number of votes re
 
 */
 
+WITH weighted_votes AS (
+    SELECT
+        candidate,
+        ROUND(1.0 / COUNT(*) OVER (PARTITION BY voter), 3) AS vote_weight
+    FROM voting_results
+    WHERE candidate IS NOT NULL
+),
+candidate_totals AS (
+    SELECT
+        candidate,
+        ROUND(SUM(vote_weight), 3) AS total_votes
+    FROM weighted_votes
+    GROUP BY candidate
+),
+ranked AS (
+    SELECT
+        candidate,
+        RANK() OVER (ORDER BY total_votes DESC) AS rnk
+    FROM candidate_totals
+)
+SELECT candidate
+FROM ranked
+WHERE rnk = 1;
