@@ -24,3 +24,21 @@ FROM (
     FROM approved_flags
 ) ranked
 WHERE rnk = 1;
+
+--Alternative
+
+WITH user_votes AS (
+    SELECT 
+        CONCAT(user_firstname, ' ', user_lastname) AS full_name,
+        COUNT(DISTINCT f.video_id) AS approved_videos
+    FROM user_flags f
+    JOIN flag_review r
+        ON f.flag_id = r.flag_id
+    WHERE r.reviewed_outcome = 'APPROVED'
+    GROUP BY full_name
+)
+SELECT full_name
+FROM user_votes
+WHERE approved_videos = (
+    SELECT MAX(approved_videos) FROM user_votes
+);
