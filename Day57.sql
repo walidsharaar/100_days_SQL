@@ -1,0 +1,3 @@
+/*
+Identify the IDs of students who scored exactly at the median for the SAT writing section.
+*/
