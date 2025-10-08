@@ -22,3 +22,17 @@ FROM
     sat_scores
 WHERE
     sat_writing = (SELECT meadian_sat_writing FROM cte)
+
+---Alteernative
+
+SELECT student_id
+FROM sat_scores
+WHERE sat_writing = (
+  SELECT sat_writing
+  FROM sat_scores
+  ORDER BY sat_writing
+  LIMIT 1
+  OFFSET (
+    SELECT COUNT(*) FROM sat_scores
+  ) / 2
+);
