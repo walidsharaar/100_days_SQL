@@ -31,7 +31,7 @@ SELECT
     r.actor_name,
     COALESCE(l.lifetime_avg, r.film_rating) AS lifetime_avg,
     r.film_rating AS recent_rating,
-    ROUND(r.film_rating - COALESCE(l.lifetime_avg, r.film_rating), 2) AS difference
+    ROUND((r.film_rating - COALESCE(l.lifetime_avg, r.film_rating))::numeric, 2) AS difference
 FROM recent AS r 
 LEFT JOIN lifetime AS l 
     ON r.actor_name = l.actor_name
