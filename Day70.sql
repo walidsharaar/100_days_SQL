@@ -23,3 +23,19 @@ new_product_after AS (
 )
 SELECT COUNT(*) AS successful_users
 FROM new_product_after;
+
+--Alternative
+
+WITH ranked AS (
+  SELECT
+    user_id,
+    product_id,
+    created_at,
+    DENSE_RANK() OVER (PARTITION BY user_id ORDER BY created_at::date) AS purchase_day_rank,
+    DENSE_RANK() OVER (PARTITION BY user_id, product_id ORDER BY created_at::date) AS product_buy_rank
+  FROM marketing_campaign
+)
+SELECT COUNT(DISTINCT user_id) AS successful_users
+FROM ranked
+WHERE purchase_day_rank > 1
+  AND product_buy_rank = 1;
